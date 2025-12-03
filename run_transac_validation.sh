@@ -15,6 +15,25 @@ verificando_arquivo(){
     echo "${RED}${date '+%Y-%m-%d  %H:%M:%S'}${NC} | ${BLUE}INFO${NC} | Verificando a existência do arquivo de transações..."
     while true;
     do
-        if ls "${FOLDER}/*.csv"
+        if ls "${FOLDER}"/*.csv \
+        "${FOLDER}"/*.CSV \
+        "${FOLDER}"/*.txt \
+        "${FOLDER}"/*.TXT \
+        "${FOLDER}"/*.txt.gz \
+        "${FOLDER}"/*.TXT.gz \
+        "${FOLDER}"/*.txt.GZ \
+        "${FOLDER}"/*.TXT.GZ \
+        "${FOLDER}"/*.csv.gz \
+        "${FOLDER}"/*.CSV.gz \
+        "${FOLDER}"/*.csv.GZ \
+        "${FOLDER}"/*.CSV.GZ 1> /dev/null 2>&1;
+        then
+            echo "${RED}${date '+%Y-%m-%d %H:%M:%S'}${NC} | ${GREEN}INFO${NC} | Arquivo encontrado."
+            break
+        fi
+    done
 }
-#python transactions_pipeline_main.py 
+excutar_pipe(){
+    echo "${RED}${date '+%Y=%m-%d %H:%M:%S'}${NC} | ${BLUE}INFO${NC} | Iniciando processamento do arquivo."
+    python transactions_pipeline_main.py
+}
