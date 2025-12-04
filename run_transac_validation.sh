@@ -1,5 +1,8 @@
 #!/bin/bash
 
+TRACE_ID="$(date +%s)-$RANDOM"
+export TRACE_ID
+
 # Carragar as varuaveis de ambiente do arquivo .env
 set -o allexport
 source .env
