@@ -27,19 +27,19 @@ timestamp(){
 }
 
 log_info(){
-    echo -e "$(timestamp) | INFO | $1"
+    echo -e "$(timestamp) | $TRACE_ID | INFO | $1"
 }
 
 log_warn(){
-    echo -e "$(timestamp) | WARN | $1"
+    echo -e "$(timestamp) | $TRACE_ID | WARN | $1"
 }
 
 log_err(){
-    echo -e "$(timestamp) | ERROR | $1"
+    echo -e "$(timestamp) | $TRACE_ID | ERROR | $1"
 }
 
 log_success(){
-    echo -e "$(timestamp) | SUCCESS | $1"
+    echo -e "$(timestamp) | $TRACE_ID | SUCCESS | $1"
 }
 
 verify_input_folder(){
