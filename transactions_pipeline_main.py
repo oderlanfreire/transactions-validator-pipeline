@@ -1,9 +1,10 @@
-from config.setup_logging import setup_logging
-setup_logging(log_folder='./logs/pipeline')
-
+from config.setup_logging import setup_logging, update_log_file
 import pandas as pd
+import os
 import logging
+from modules.util import find_valid_file
 from modules.reader import read_file
+
 
 def read_transactions_file(file_path: str):
     logging.info(f"Iniciando leitura do arquivo {file_path}")
@@ -24,6 +25,10 @@ def read_transactions_file(file_path: str):
 
 
 def main():
+    file_path = find_valid_file('./input')
+    filename = os.path.basename(file_path)
+    file_stem, _ = os.path.splitext(filename)
+    setup_logging('./logs/pipeline', f'{file_stem}')
     pass
 
 

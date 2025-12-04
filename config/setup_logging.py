@@ -10,14 +10,14 @@ class TraceIdFilter(logging.Filter):
         return True
 
 
-def setup_logging(log_folder: str):
+def setup_logging(log_folder: str, log_file: str):
     os.makedirs(log_folder, exist_ok= True)
     formatter = logging.Formatter(
         '%(asctime)s - %(trace_id)s - %(name)s - %(levelname)s - %(message)s'
     )
 
     file_handler = RotatingFileHandler(
-        os.path.join(log_folder, 'app.log'),
+        os.path.join(log_folder, f'{log_file}_{TRACE_ID}.log'),
         maxBytes=5*1024*1024,
         backupCount=5
     )
@@ -32,3 +32,4 @@ def setup_logging(log_folder: str):
     logger.setLevel(logging.INFO)
     logger.addHandler(file_handler)
     logger.addHandler(console_handler)
+
