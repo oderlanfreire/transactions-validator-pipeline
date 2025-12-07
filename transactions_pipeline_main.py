@@ -4,7 +4,7 @@ import pandas as pd
 import json
 import os
 import logging
-from modules.util import find_valid_file
+from modules.util import find_valid_file, smart_file_stem
 from modules.reader import read_file
 from modules.treatment import normalize, rename_columns, convert_data_types
 from modules.validator import validate
@@ -52,8 +52,7 @@ def validate_rules(dataframe: pd.DataFrame, required_columns: list, optional_col
 
 def main():
     file_path = find_valid_file('./input')
-    filename = os.path.basename(file_path)
-    file_stem, _ = os.path.splitext(filename)
+    file_stem= smart_file_stem(file_path)
     setup_logging('./logs/pipeline', f'{file_stem}')
     schema = load_json_schema('./schemas/transactions_schema.json')
     dtype_mapping = schema.get('dtype_mappings', {})
