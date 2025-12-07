@@ -1,0 +1,145 @@
+{
+  "schema_name": "payment_authorization_transactions",
+  "schema_version": "1.0.0",
+  "description": "Schema analítico para eventos de autorização de pagamento (cartão, pix, boleto).",
+
+  "header_normalization": {
+    "lowercase": true,
+    "strip_whitespace": true,
+    "replace_spaces_with_underscore": true,
+    "replace_hyphens_with_underscore": true,
+    "remove_accents": true
+  },
+
+  "required_columns": [
+    "transaction_id",
+    "event_timestamp",
+    "amount",
+    "currency",
+    "authorization_status",
+    "payment_method",
+    "payment_channel",
+    "response_code"
+  ],
+
+  "optional_columns": [
+    "order_id",
+    "merchant_id",
+    "acquirer",
+    "brand",
+    "issuer",
+    "payer_bank",
+    "decline_reason_category",
+    "card_type"
+  ],
+
+  "dtype_mappings": {
+    "transaction_id": "string",
+    "order_id": "string",
+    "merchant_id": "string",
+    "event_timestamp": "datetime",
+    "amount": "float",
+    "currency": "string",
+    "acquirer": "string",
+    "brand": "string",
+    "issuer": "string",
+    "payer_bank": "string",
+    "authorization_status": "string",
+    "response_code": "string",
+    "decline_reason_category": "string",
+    "payment_method": "string",
+    "payment_channel": "string",
+    "card_type": "string"
+  },
+
+  "column_aliases": {
+    "core_identifiers": {
+      "id_transacao": "transaction_id",
+      "id_transação": "transaction_id",
+      "transactionid": "transaction_id",
+      "authorization_id": "transaction_id",
+      "auth_id": "transaction_id",
+      "id_autorizacao": "transaction_id",
+      "id_autorização": "transaction_id",
+
+      "id_pedido": "order_id",
+      "pedido_id": "order_id",
+      "orderid": "order_id",
+
+      "id_lojista": "merchant_id",
+      "id_estabelecimento": "merchant_id",
+      "merchantid": "merchant_id",
+      "estabelecimento_id": "merchant_id"
+    },
+
+    "time_and_amount": {
+      "data_evento": "event_timestamp",
+      "data_transacao": "event_timestamp",
+      "data_transação": "event_timestamp",
+      "timestamp_evento": "event_timestamp",
+      "event_time": "event_timestamp",
+      "created_at": "event_timestamp",
+      "dt_evento": "event_timestamp",
+
+      "valor": "amount",
+      "valor_total": "amount",
+      "transaction_amount": "amount"
+    },
+
+    "payment_context": {
+      "moeda": "currency",
+      "currency_code": "currency",
+
+      "adquirente": "acquirer",
+      "acquirer_name": "acquirer",
+
+      "bandeira": "brand",
+      "card_brand": "brand",
+
+      "emissor": "issuer",
+      "issuer_bank": "issuer",
+
+      "banco_pagador": "payer_bank",
+      "payerbank": "payer_bank"
+    },
+
+    "authorization_outcome": {
+      "status_autorizacao": "authorization_status",
+      "status_autorização": "authorization_status",
+      "authorizationstatus": "authorization_status",
+      "auth_status": "authorization_status",
+      "resultado_autorizacao": "authorization_status",
+      "resultado_autorização": "authorization_status",
+
+      "codigo_resposta": "response_code",
+      "código_resposta": "response_code",
+      "responsecode": "response_code",
+      "auth_response_code": "response_code",
+
+      "motivo_recusa": "decline_reason_category",
+      "categoria_recusa": "decline_reason_category",
+      "decline_category": "decline_reason_category"
+    },
+
+    "payment_method_and_channel": {
+      "metodo_pagamento": "payment_method",
+      "método_pagamento": "payment_method",
+      "tipo_pagamento": "payment_method",
+      "paymentmethod": "payment_method",
+
+      "canal_pagamento": "payment_channel",
+      "paymentchannel": "payment_channel"
+    },
+
+    "card_details": {
+      "tipo_cartao": "card_type",
+      "tipo_cartão": "card_type",
+      "cardtype": "card_type"
+    }
+  },
+
+  "alias_policy": {
+    "allow_ambiguous_aliases": false,
+    "notes": "Aliases genéricos como 'status', 'bank' e 'canal' foram evitados para não gerar mapeamentos incorretos."
+  }
+}
