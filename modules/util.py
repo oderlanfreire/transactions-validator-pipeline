@@ -1,5 +1,6 @@
 import os
 import glob
+import shutil
 
 patterns = ('.csv.gz', '.txt.gz', '.csv', '.txt')
 
@@ -14,6 +15,7 @@ def find_valid_file(folder: str) -> str:
     if not valid:
         raise FileNotFoundError(f"Nenhum arquivo válido encontrado na pasta: {folder}")
     
+    valid.sort()
     return valid[0]
 
 
@@ -28,4 +30,23 @@ def smart_file_stem(file_path:str) -> str:
 
     raise ValueError(f"arquivo com extensão inválida: {name}."
                      "Verifique o fluxo de execução.")
-    
+
+
+def move_file_to_hist(base_name:str, timestamp:str):
+    ts = timestamp
+    matches = glob.glob(os.path.join("input/", f"{base_name}*"))
+
+    os.makedirs("hist/", exist_ok=True)
+
+    if len(matches) == 0:
+        raise FileNotFoundError("Nenhum arquivo encontrado para esse basename.")
+    if len(matches) > 1:
+        raise ValueError("Mais de um arquivo encontrado. Fluxo espera apenas 1.")
+
+    src = matches[0]
+    filename = os.path.basename(src)
+
+    dst = os.path.join("hist/", f"{ts}_{filename}")
+    shutil.move(src, dst)
+
+    return dst

@@ -4,7 +4,7 @@ from pandas.errors import EmptyDataError, ParserError
 
 def read_file(file_path: str) -> pd.DataFrame:
     try:
-        dataframe = pd.read_csv(file_path, encoding='utf-', sep=',', header=0)
+        dataframe = pd.read_csv(file_path, encoding='utf-8', sep=',', header=0)
         return dataframe
     except FileNotFoundError:
         raise FileNotFoundError(f"O arquivo não foi encontrado na pasta: {file_path}")

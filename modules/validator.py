@@ -4,11 +4,9 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-def validate(dataframe: pd.DataFrame, required_columns: list, optional_columns: list, column_aliases: dict) -> Tuple[pd.DataFrame, pd.DataFrame]:
+def validate(dataframe: pd.DataFrame, required_columns: list, optional_columns: list) -> Tuple[pd.DataFrame, pd.DataFrame]:
     df = dataframe.copy()
 
-    if column_aliases:
-        df.rename(columns=column_aliases, inplace=True)
 
     brand = df.get("brand")
     acquirer = df.get("acquirer")
@@ -29,7 +27,7 @@ def validate(dataframe: pd.DataFrame, required_columns: list, optional_columns: 
         ((df['response_code'] == '00') | (~df['response_code'].isin(["05", "51", "54", "91"])))
     )
 
-    has_card_fields = False
+    has_card_fields = pd.Series(False, index=df.index)
 
     if brand is not None:
         has_card_fields = has_card_fields | brand.notna()
@@ -53,8 +51,19 @@ def validate(dataframe: pd.DataFrame, required_columns: list, optional_columns: 
         boleto_pix_wrong
     )
 
-    valid_df = df[~invalid_conditions].reset_index(drop=True)
-    invalid_df = df[invalid_conditions].reset_index(drop=True)
+    error_reason = pd.Series(index=df.index, dtype="string")
+    error_reason.loc[missing_required_values] = "campos obrigatorios faltantes"
+    error_reason.loc[negative_amounts & error_reason.isna()] = "amount inválido"
+    error_reason.loc[approved_wrong_response & error_reason.isna()] = "aprovação inválida"
+    error_reason.loc[declined_wrong_response & error_reason.isna()] = "rejeição inválida"
+    error_reason.loc[boleto_pix_wrong & error_reason.isna()] = "campo preenchido quando deveria ser vazio no pagamento com pix ou boleto"
+    
+    df["error_reason"] = error_reason
+
+    valid_df = df[~invalid_conditions].copy()
+    invalid_df = df[invalid_conditions].copy()
+
+    valid_df = valid_df.drop(columns=['error_reason'])
 
     logger.info(f"Total de linhas válidas: {len(valid_df)}")
     logger.info(f"Total de linhas inválidas: {len(invalid_df)}")

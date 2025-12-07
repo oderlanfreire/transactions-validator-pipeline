@@ -8,6 +8,7 @@ from modules.util import find_valid_file, smart_file_stem
 from modules.reader import read_file
 from modules.treatment import normalize, rename_columns, convert_data_types
 from modules.validator import validate
+from modules.writer import save_data
 
 
 def load_json_schema(schema_path: str) -> Dict[str, any]:
@@ -36,15 +37,16 @@ def treat_transactions_data(dataframe: pd.DataFrame, aliases: Dict[str, Any], dt
 
 def validate_rules(dataframe: pd.DataFrame, required_columns: list, optional_columns: list, column_aliases: dict) -> Tuple[pd.DataFrame, pd.DataFrame]:
     logging.info("Iniciando validação de regras")
-    valid_df, invalid_df = validate(dataframe, required_columns, optional_columns, column_aliases)
+    valid_df, invalid_df = validate(dataframe, required_columns, optional_columns)
     logging.info(f"Validação de regras concluída. Linhas válidas: {len(valid_df)}, Linhas inválidas: {len(invalid_df)}")
     return valid_df, invalid_df
 
 
 
-
-
-
+def save_process(valid_df: pd.DataFrame, invalid_df: pd.DataFrame, basename: str) -> None:
+    logging.info("Iniciando processo de salvamento")
+    save_data(valid_df, invalid_df, basename)
+    logging.info("encerrando processo...")
 
 
 
@@ -60,10 +62,11 @@ def main():
     optional_columns = schema.get('optional_columns', [])
     column_aliases = schema.get('column_aliases', {})
 
-    #data = read_transactions_file(file_path)
-    #treated_data = treat_transactions_data(data, column_aliases, dtype_mapping)
-    #valid_data, invalid_data = validate_rules(treated_data, required_columns, optional_columns, column_aliases)
-    
+    data = read_transactions_file(file_path)
+    treated_data = treat_transactions_data(data, column_aliases, dtype_mapping)
+    valid_data, invalid_data = validate_rules(treated_data, required_columns, optional_columns, column_aliases)
+    save_process(valid_data, invalid_data, file_stem)
+    logging.info("Encerrando pipeline.")
     pass
 
 
