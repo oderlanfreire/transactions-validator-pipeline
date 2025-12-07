@@ -1,13 +1,9 @@
 import os
 import glob
-import logging
 
-logger = logging.getLogger(__name__)
-
+patterns = ('.csv.gz', '.txt.gz', '.csv', '.txt')
 
 def find_valid_file(folder: str) -> str:
-    patterns = ('.csv', '.txt', '.csv.gz', '.txt.gz')
-
     files = glob.glob(os.path.join(folder, '*'))
 
     valid = [
@@ -23,7 +19,6 @@ def find_valid_file(folder: str) -> str:
 
 
 def smart_file_stem(file_path:str) -> str:
-    patterns = ('.csv', '.txt', '.csv.gz', '.txt.gz')
     name = os.path.basename(file_path)
     name_lower = name.lower()
 
@@ -31,8 +26,6 @@ def smart_file_stem(file_path:str) -> str:
         if name_lower.endswith(ext):
             return name[: -len(ext)]
 
-    logger.error("Estado impossível atingido: Arquivo com extensão inesperada após função de validação."
-                 "Verifique o fluxo de execução.")
-        
-    raise ValueError(f"arquivo com extensão inválida: {name}")
+    raise ValueError(f"arquivo com extensão inválida: {name}."
+                     "Verifique o fluxo de execução.")
     
