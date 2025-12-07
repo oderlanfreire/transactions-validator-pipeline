@@ -11,7 +11,7 @@ from modules.validator import validate
 from modules.writer import save_data
 
 
-def load_json_schema(schema_path: str) -> Dict[str, any]:
+def load_json_schema(schema_path: str) -> Dict[str, Any]:
     with open(schema_path, 'r', encoding='utf-8') as file:
         return json.load(file)
 
@@ -35,7 +35,7 @@ def treat_transactions_data(dataframe: pd.DataFrame, aliases: Dict[str, Any], dt
     return converted_types_df
 
 
-def validate_rules(dataframe: pd.DataFrame, required_columns: list, optional_columns: list, column_aliases: dict) -> Tuple[pd.DataFrame, pd.DataFrame]:
+def validate_rules(dataframe: pd.DataFrame, required_columns: list, optional_columns: list) -> Tuple[pd.DataFrame, pd.DataFrame]:
     logging.info("Iniciando validação de regras")
     valid_df, invalid_df = validate(dataframe, required_columns, optional_columns)
     logging.info(f"Validação de regras concluída. Linhas válidas: {len(valid_df)}, Linhas inválidas: {len(invalid_df)}")
@@ -67,7 +67,6 @@ def main():
     valid_data, invalid_data = validate_rules(treated_data, required_columns, optional_columns, column_aliases)
     save_process(valid_data, invalid_data, file_stem)
     logging.info("Encerrando pipeline.")
-    pass
 
 
 
