@@ -32,11 +32,11 @@ def smart_file_stem(file_path:str) -> str:
                      "Verifique o fluxo de execução.")
 
 
-def move_file_to_hist(base_name:str, timestamp:str):
+def move_file_to_hist(base_name:str, timestamp:str, input_dir = "input", hist_dir = "hist"):
     ts = timestamp
-    matches = glob.glob(os.path.join("input/", f"{base_name}*"))
+    matches = glob.glob(os.path.join(input_dir, f"{base_name}*"))
 
-    os.makedirs("hist/", exist_ok=True)
+    os.makedirs(hist_dir, exist_ok=True)
 
     if len(matches) == 0:
         raise FileNotFoundError("Nenhum arquivo encontrado para esse basename.")
@@ -46,7 +46,7 @@ def move_file_to_hist(base_name:str, timestamp:str):
     src = matches[0]
     filename = os.path.basename(src)
 
-    dst = os.path.join("hist/", f"{ts}_{filename}")
+    dst = os.path.join(hist_dir, f"{ts}_{filename}")
     shutil.move(src, dst)
 
     return dst
