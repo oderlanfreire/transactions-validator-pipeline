@@ -1,5 +1,6 @@
 from typing import Any, Dict, Tuple
 from config.setup_logging import setup_logging
+from pathlib import Path
 import pandas as pd
 import json
 import os
@@ -18,9 +19,9 @@ def load_json_schema(schema_path: str) -> Dict[str, Any]:
 
 
 def read_transactions_file(file_path: str) -> pd.DataFrame:
-    logging.info(f"Iniciando leitura do arquivo {file_path}")
+    logging.info(f"Iniciando leitura do arquivo {Path(file_path).as_posix()}")
     dataframe = read_file(file_path)
-    logging.info(f"Arquivo {file_path} lido com sucesso, total de linhas: {len(dataframe)}")
+    logging.info(f"Arquivo {Path(file_path).as_posix()} lido com sucesso, total de linhas: {len(dataframe)}")
     return dataframe
 
 def treat_transactions_data(dataframe: pd.DataFrame, aliases: Dict[str, Any], dtype_mapping: Dict[str, Any]) -> pd.DataFrame:
@@ -56,7 +57,7 @@ def main():
     file_path = find_valid_file('./input')
     file_stem= smart_file_stem(file_path)
     setup_logging('./logs/pipeline', f'{file_stem}')
-    schema = load_json_schema('./schemas/transactions_schema.json')
+    schema = load_json_schema('./schemas/treatment_rules.json')
     dtype_mapping = schema.get('dtype_mappings', {})
     required_columns = schema.get('required_columns', [])
     optional_columns = schema.get('optional_columns', [])
@@ -64,7 +65,7 @@ def main():
 
     data = read_transactions_file(file_path)
     treated_data = treat_transactions_data(data, column_aliases, dtype_mapping)
-    valid_data, invalid_data = validate_rules(treated_data, required_columns, optional_columns, column_aliases)
+    valid_data, invalid_data = validate_rules(treated_data, required_columns, optional_columns)
     save_process(valid_data, invalid_data, file_stem)
     logging.info("Encerrando pipeline.")
 

@@ -32,7 +32,7 @@ def smart_file_stem(file_path:str) -> str:
                      "Verifique o fluxo de execução.")
 
 
-def move_file_to_hist(base_name:str, timestamp:str, input_dir = "input", hist_dir = "hist"):
+def move_file_to_hist(base_name:str, timestamp:str, input_dir = "input", hist_dir = "hist") ->str:
     ts = timestamp
     matches = glob.glob(os.path.join(input_dir, f"{base_name}*"))
 

@@ -1,4 +1,5 @@
 import pandas as pd
+from pathlib import Path
 from datetime import datetime
 from zoneinfo import ZoneInfo
 import logging
@@ -34,13 +35,13 @@ def save_data(valid:pd.DataFrame, invalid: pd.DataFrame, basename) -> None:
 
 
 
-    logger.info(f"Salvando arquivo valido em {valid_path}")
+    logger.info(f"Salvando arquivo valido em {Path(valid_path).as_posix()}")
     valid.to_csv(valid_path, index=False)
 
-    logger.info(f"Salvando arquivo invalido em {invalid_path}")
+    logger.info(f"Salvando arquivo invalido em {Path(invalid_path).as_posix()}")
     new_invalid.to_csv(invalid_path, index=False)
 
-    logger.info(f"Salvando arquivo de erros em {error_path}")
+    logger.info(f"Salvando arquivo de erros em {Path(error_path).as_posix()}")
     error_df.to_csv(
         error_path,
         sep="|",
@@ -51,7 +52,4 @@ def save_data(valid:pd.DataFrame, invalid: pd.DataFrame, basename) -> None:
 
     logger.info("Movendo arquivo de input para hist...")
     moved_to = move_file_to_hist(basename, ts)
-    logger.info(f"Arquivo movido para {moved_to}")
-
-
-
+    logger.info(f"Arquivo movido para {Path(moved_to).as_posix()}")

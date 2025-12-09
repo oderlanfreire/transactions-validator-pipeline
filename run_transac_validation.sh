@@ -4,16 +4,23 @@ TRACE_ID="$(date +%s)-$RANDOM"
 export TRACE_ID
 
 # Carragar as varuaveis de ambiente do arquivo .env
-set -o allexport
-source .env
-set +o allexport
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+if [ -f "$SCRIPT_DIR/.env" ]; then
+  set -o allexport
+  . "$SCRIPT_DIR/.env"
+  set +o allexport
+else
+  echo "Aviso: .env não encontrado em $SCRIPT_DIR"
+fi
 
 mkdir -p "$LOG_FOLDER_SH"
 LOG_TS=$(date '+%Y%m%d_%H%M%S')
 
+LOG_FILE="$LOG_FOLDER_SH/logs/transactions_pipeline_${LOG_TS}.log"
+ERR_FILE="$LOG_FOLDER_SH/error/transactions_pipeline_${LOG_TS}.err"
 
-# Redirecionamento de logs para arquivo
-exec >> "$LOG_FOLDER_SH/transactions_pipeline_${LOG_TS}.log" 2>> "$LOG_FOLDER_SH/transactions_pipeline_${LOG_TS}.err"
+exec > >(tee -a "$LOG_FILE") 2> >(tee -a "$ERR_FILE" >&2)
 
 
 
