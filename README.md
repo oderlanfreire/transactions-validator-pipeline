@@ -270,3 +270,6 @@ Cobertura sugerida:
 ## Requisitos
 - Python 3.10+
 - Dependências em `requirements.txt`
+
+## Link de download do csv
+[Download do arquivo de exemplo (.csv)](https://drive.google.com/file/d/1fFTMMPBybbSM6VN3Vc3oUwsmHUPUCR4B/view?usp=sharing)
