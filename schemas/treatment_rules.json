@@ -138,6 +138,11 @@
     }
   },
 
+  "response_code": {
+  "type": "string",
+  "zfill": 2
+  },
+
   "alias_policy": {
     "allow_ambiguous_aliases": false,
     "notes": "Aliases genéricos como 'status', 'bank' e 'canal' foram evitados para não gerar mapeamentos incorretos."
